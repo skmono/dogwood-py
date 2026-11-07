@@ -1,0 +1,56 @@
+[build-system]
+requires = ["maturin>=1.10,<2"]
+build-backend = "maturin"
+
+[project]
+# Maturin merges package metadata from pyproject.toml (preferred) and Cargo.toml;
+# the version comes from Cargo.toml.
+# c.f. https://www.maturin.rs/metadata.html
+name = "dogwoodpy"
+description = "Python bindings for the Dogwood policy CLI: check, validate, lower, explain, and replay Dogwood policies."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "skmono", email = "monolese@gmail.com" }]
+keywords = ["dogwood", "cedar", "policy", "authorization"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Programming Language :: Python :: Free Threading :: 3 - Stable",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Rust",
+    "Topic :: Security",
+    "Typing :: Typed",
+]
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/skmono/dogwood-py"
+Issues = "https://github.com/skmono/dogwood-py/issues"
+"Dogwood documentation" = "https://dogwood-policy.github.io/dogwood/"
+
+[project.optional-dependencies]
+dev = [
+    "maturin>=1.10,<2",
+    "mypy>=1.13",
+    "pip-tools>=7.4.1",
+    "pytest>=8",
+]
+
+[tool.maturin]
+exclude = ["third_party/**/*", "tests/**/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

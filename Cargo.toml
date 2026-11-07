@@ -1,0 +1,36 @@
+[package]
+name = "dogwoodpy"
+version = "0.1.0"
+edition = "2024"
+description = "Python bindings for the Dogwood policy CLI"
+license = "Apache-2.0"
+repository = "https://github.com/skmono/dogwood-py"
+readme = "README.md"
+# Shipped to PyPI by maturin, never to crates.io.
+publish = false
+# Repo-only files stay out of the sdist. The `third_party/dogwood` submodule
+# (dogwood v1.1) is the test reference only; release builds use the crates.io
+# dependencies below.
+exclude = [
+    "/.github",
+    "/.gitignore",
+    "/.gitmodules",
+    "/Makefile",
+    "/docs",
+    "/requirements*.txt",
+    "/stubtest-allowlist.txt",
+    "/tests",
+    "/third_party",
+]
+
+[lib]
+name = "dogwoodpy"
+crate-type = ["cdylib"]
+
+[dependencies]
+dogwood-formatter = "1.1"
+dogwood-language = "1.1"
+miette = { version = "7.6", features = ["fancy"] }
+pyo3 = "0.30"
+serde = "1.0"
+serde_json = "1.0"

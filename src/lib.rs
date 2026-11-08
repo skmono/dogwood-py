@@ -19,7 +19,7 @@ mod render;
 use error::OpError;
 use ops::SchemaInputs;
 
-create_exception!(dogwoodpy, DogwoodError, PyException);
+create_exception!(pydogwood, DogwoodError, PyException);
 
 /// Output format shared by every command (`"human"` or `"json"`).
 #[derive(Copy, Clone, PartialEq, Eq)]
@@ -235,7 +235,7 @@ fn schema_mcp(manifest: &str) -> PyResult<String> {
 }
 
 #[pymodule]
-fn dogwoodpy(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn pydogwood(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("DogwoodError", m.py().get_type::<DogwoodError>())?;
     m.add_function(wrap_pyfunction!(py_format, m)?)?;
     m.add_function(wrap_pyfunction!(check_parse, m)?)?;

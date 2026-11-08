@@ -6,7 +6,7 @@ build-backend = "maturin"
 # Maturin merges package metadata from pyproject.toml (preferred) and Cargo.toml;
 # the version comes from Cargo.toml.
 # c.f. https://www.maturin.rs/metadata.html
-name = "dogwoodpy"
+name = "pydogwood"
 description = "Python bindings for the Dogwood policy CLI: check, validate, lower, explain, and replay Dogwood policies."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -37,8 +37,8 @@ classifiers = [
 dynamic = ["version"]
 
 [project.urls]
-Repository = "https://github.com/skmono/dogwood-py"
-Issues = "https://github.com/skmono/dogwood-py/issues"
+Repository = "https://github.com/skmono/pydogwood"
+Issues = "https://github.com/skmono/pydogwood/issues"
 "Dogwood documentation" = "https://dogwood-policy.github.io/dogwood/"
 
 [project.optional-dependencies]

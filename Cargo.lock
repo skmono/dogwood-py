@@ -527,18 +527,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dogwoodpy"
-version = "0.1.0"
-dependencies = [
- "dogwood-formatter",
- "dogwood-language",
- "miette",
- "pyo3",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "dyn-clone"
 version = "1.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1430,6 +1418,18 @@ checksum = "4dcd034599e63b970727f70d79e02d62390a4a84f7c6b827c27c46d5ac3fa622"
 dependencies = [
  "ar_archive_writer",
  "cc",
+]
+
+[[package]]
+name = "pydogwood"
+version = "0.1.0"
+dependencies = [
+ "dogwood-formatter",
+ "dogwood-language",
+ "miette",
+ "pyo3",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

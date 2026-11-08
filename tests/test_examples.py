@@ -9,7 +9,7 @@ without that feature; `test_cli_parity.py` covers how they are rejected.
 
 import pytest
 
-import dogwoodpy
+import pydogwood
 from conftest import bundle_params
 
 supported = bundle_params(lambda b: not b.needs_arithmetic)
@@ -17,18 +17,18 @@ supported = bundle_params(lambda b: not b.needs_arithmetic)
 
 @pytest.mark.parametrize("bundle", supported)
 def test_validates(bundle):
-    dogwoodpy.validate(bundle.policy, policy_schema=bundle.schema, **bundle.schema_kwargs())
+    pydogwood.validate(bundle.policy, policy_schema=bundle.schema, **bundle.schema_kwargs())
 
 
 @pytest.mark.parametrize("bundle", supported)
 def test_explain_matches_explain_out(bundle):
-    out = dogwoodpy.explain(bundle.policy, policy_schema=bundle.schema, **bundle.schema_kwargs())
+    out = pydogwood.explain(bundle.policy, policy_schema=bundle.schema, **bundle.schema_kwargs())
     assert out.rstrip() == bundle.read("explain.out").rstrip()
 
 
 @pytest.mark.parametrize("bundle", bundle_params(lambda b: not b.needs_arithmetic and b.has("trace.log")))
 def test_replay_matches_expected_out(bundle):
-    out = dogwoodpy.replay(
+    out = pydogwood.replay(
         bundle.policy,
         policy_schema=bundle.schema,
         trace=bundle.read("trace.log"),

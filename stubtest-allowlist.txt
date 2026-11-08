@@ -1,3 +1,3 @@
-# The native extension module maturin wraps in the `dogwoodpy` package;
-# its contents are re-exported and covered by dogwoodpy.pyi.
-dogwoodpy.dogwoodpy
+# The native extension module maturin wraps in the `pydogwood` package;
+# its contents are re-exported and covered by pydogwood.pyi.
+pydogwood.pydogwood

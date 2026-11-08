@@ -52,6 +52,8 @@ report = pydogwood.replay(
   `UserWarning`. The CLI prints this as a note on stderr.
 - The package ships type stubs (`py.typed`), so `format` and `emit` values and
   keyword-only flags are checked by mypy, pyright and editors.
+- `pydogwood.DOGWOOD_VERSION` is the Dogwood CLI version the bindings mirror
+  (e.g. `"1.1.0"`), the equivalent of `dogwood --version`.
 
 See the [Dogwood documentation](https://dogwood-policy.github.io/dogwood/) for
 the policy language, schemas and trace format.

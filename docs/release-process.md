@@ -1,16 +1,16 @@
 # Release Process
 
-Releasing a new `dogwoodpy` version is tag-driven. Pushing a `v*` tag triggers the `release` job in
+Releasing a new `pydogwood` version is tag-driven. Pushing a `v*` tag triggers the `release` job in
 `.github/workflows/CI.yml`. That job waits for wheels from every platform plus the sdist, generates build-provenance
 attestations, and publishes to PyPI through [Trusted Publishing](https://docs.pypi.org/trusted-publishers/) (OIDC, so
 no long-lived tokens).
 
 ## Prerequisites (one-time)
 
-- A PyPI trusted publisher for `dogwoodpy`. Before the first release, add it as a *pending* publisher at
+- A PyPI trusted publisher for `pydogwood`. Before the first release, add it as a *pending* publisher at
   https://pypi.org/manage/account/publishing/. Afterwards it lives at
-  https://pypi.org/manage/project/dogwoodpy/settings/publishing/. Configure it with:
-    - Owner `skmono`, repository `dogwood-py`, workflow `CI.yml`, environment `pypi-release`
+  https://pypi.org/manage/project/pydogwood/settings/publishing/. Configure it with:
+    - Owner `skmono`, repository `pydogwood`, workflow `CI.yml`, environment `pypi-release`
 - A GitHub environment `pypi-release`, created in the repo under Settings → Environments, with:
     - Deployment tags restricted to the pattern `v*`
     - A required reviewer (a maintainer), which adds a manual approval step to every release
@@ -40,7 +40,7 @@ From the updated `main`:
 
 ```bash
 git checkout main && git pull
-git tag -a vX.Y.Z -m "dogwoodpy vX.Y.Z"
+git tag -a vX.Y.Z -m "pydogwood vX.Y.Z"
 git push origin vX.Y.Z
 ```
 
@@ -56,7 +56,7 @@ The job then downloads every wheel and the sdist, attests them, and runs `maturi
 
 ### 4. Verify
 
-At https://pypi.org/project/dogwoodpy/X.Y.Z/, check that the sdist and wheels for every platform are present:
+At https://pypi.org/project/pydogwood/X.Y.Z/, check that the sdist and wheels for every platform are present:
 
 - **Linux:** x86_64 and aarch64 (manylinux)
 - **macOS:** x86_64 and arm64

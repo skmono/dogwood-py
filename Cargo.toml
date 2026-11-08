@@ -1,10 +1,10 @@
 [package]
-name = "dogwoodpy"
+name = "pydogwood"
 version = "0.1.0"
 edition = "2024"
 description = "Python bindings for the Dogwood policy CLI"
 license = "Apache-2.0"
-repository = "https://github.com/skmono/dogwood-py"
+repository = "https://github.com/skmono/pydogwood"
 readme = "README.md"
 # Shipped to PyPI by maturin, never to crates.io.
 publish = false
@@ -24,7 +24,7 @@ exclude = [
 ]
 
 [lib]
-name = "dogwoodpy"
+name = "pydogwood"
 crate-type = ["cdylib"]
 
 [dependencies]

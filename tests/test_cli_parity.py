@@ -16,7 +16,7 @@ from typing import Callable
 
 import pytest
 
-import dogwoodpy
+import pydogwood
 from conftest import BUNDLES, EXAMPLES, MCP_MANIFEST, read_utf8
 
 FORMATS = ("human", "json")
@@ -42,30 +42,30 @@ def _bundle_cases(b):
     policy, schema, flags, kw = b.policy, b.schema, b.schema_flags(), b.schema_kwargs()
     ps = ["--policy-schema", "schema.cedarschema"]
     lowered = {"policies": policy, "policy_schema": schema, **kw}
-    yield Case("format", ["format", "policy.dw"], dogwoodpy.format, {"policies": policy}, formats=(None,))
-    yield Case("check-parse", ["check-parse", "policy.dw", *flags], dogwoodpy.check_parse, {"policies": policy, **kw})
-    yield Case("validate", ["validate", "policy.dw", *ps, *flags], dogwoodpy.validate, lowered)
+    yield Case("format", ["format", "policy.dw"], pydogwood.format, {"policies": policy}, formats=(None,))
+    yield Case("check-parse", ["check-parse", "policy.dw", *flags], pydogwood.check_parse, {"policies": policy, **kw})
+    yield Case("validate", ["validate", "policy.dw", *ps, *flags], pydogwood.validate, lowered)
     for emit in EMITS:
         yield Case(
             f"lower-{emit}",
             ["lower", "policy.dw", *ps, "--emit", emit, *flags],
-            dogwoodpy.lower,
+            pydogwood.lower,
             {**lowered, "emit": emit},
         )
-    yield Case("explain", ["explain", "policy.dw", *ps, *flags], dogwoodpy.explain, lowered)
-    yield Case("explain-no-schema", ["explain", "policy.dw", *flags], dogwoodpy.explain, {"policies": policy, **kw})
-    yield Case("schema-action", ["schema", "action", "schema.cedarschema"], dogwoodpy.schema_action, {"schema": schema})
+    yield Case("explain", ["explain", "policy.dw", *ps, *flags], pydogwood.explain, lowered)
+    yield Case("explain-no-schema", ["explain", "policy.dw", *flags], pydogwood.explain, {"policies": policy, **kw})
+    yield Case("schema-action", ["schema", "action", "schema.cedarschema"], pydogwood.schema_action, {"schema": schema})
     for _, key, name in b.overrides:
         if key == "event_schema":
-            yield Case("schema-event", ["schema", "event", name], dogwoodpy.schema_event, {"schema": b.read(name)})
+            yield Case("schema-event", ["schema", "event", name], pydogwood.schema_event, {"schema": b.read(name)})
         elif key == "providers":
-            yield Case("schema-providers", ["schema", "providers", name], dogwoodpy.schema_providers, {"providers": b.read(name)})
+            yield Case("schema-providers", ["schema", "providers", name], pydogwood.schema_providers, {"providers": b.read(name)})
     if b.has("trace.log"):
         trace = b.read("trace.log")
         yield Case(
             "replay",
             ["replay", "policy.dw", *ps, "--trace", "trace.log", *flags],
-            dogwoodpy.replay,
+            pydogwood.replay,
             {**lowered, "trace": trace},
         )
         # Error path: an unparsable trace line.
@@ -73,16 +73,16 @@ def _bundle_cases(b):
         yield Case(
             "replay-bad-trace",
             ["replay", "policy.dw", *ps, "--trace", "-", *flags],
-            dogwoodpy.replay,
+            pydogwood.replay,
             {**lowered, "trace": bad_trace},
             stdin=bad_trace,
         )
     # Error paths: truncated policy and truncated action schema.
     cut = _half(policy)
-    yield Case("check-parse-cut", ["check-parse", "-", *flags], dogwoodpy.check_parse, {"policies": cut, **kw}, stdin=cut)
-    yield Case("validate-cut", ["validate", "-", *ps, *flags], dogwoodpy.validate, {**lowered, "policies": cut}, stdin=cut)
+    yield Case("check-parse-cut", ["check-parse", "-", *flags], pydogwood.check_parse, {"policies": cut, **kw}, stdin=cut)
+    yield Case("validate-cut", ["validate", "-", *ps, *flags], pydogwood.validate, {**lowered, "policies": cut}, stdin=cut)
     cut_schema = _half(schema)
-    yield Case("schema-action-cut", ["schema", "action", "-"], dogwoodpy.schema_action, {"schema": cut_schema}, stdin=cut_schema)
+    yield Case("schema-action-cut", ["schema", "action", "-"], pydogwood.schema_action, {"schema": cut_schema}, stdin=cut_schema)
 
 
 def _cases():
@@ -96,7 +96,7 @@ def _cases():
         ("tools-object", '{"tools": []}'),
         ("not-json", "not json"),
     ]:
-        case = Case(f"schema-mcp-{name}", ["schema", "mcp", "--manifest", "-"], dogwoodpy.schema_mcp, {"manifest": manifest}, stdin=manifest)
+        case = Case(f"schema-mcp-{name}", ["schema", "mcp", "--manifest", "-"], pydogwood.schema_mcp, {"manifest": manifest}, stdin=manifest)
         yield pytest.param(case, None, id=case.id)
 
 
@@ -117,7 +117,7 @@ def test_matches_cli(dogwood_cli, case, fmt):
             assert all(w.category is UserWarning for w in caught)
             assert "".join(f"note: {w.message}\n" for w in caught) == stderr
             return
-        with pytest.raises(dogwoodpy.DogwoodError) as err:
+        with pytest.raises(pydogwood.DogwoodError) as err:
             case.fn(**kwargs)
     if stdout:
         assert str(err.value) == stdout

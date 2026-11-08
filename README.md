@@ -1,4 +1,4 @@
-# dogwoodpy
+# pydogwood
 
 Python bindings for the [Dogwood](https://github.com/dogwood-policy/dogwood) policy toolchain.
 
@@ -13,15 +13,15 @@ with the same names and defaults. Each function returns exactly what the CLI
 would print to stdout.
 
 ```python
-import dogwoodpy
+import pydogwood
 
 policy = open("policy.dw").read()
 schema = open("schema.cedarschema").read()
 
-print(dogwoodpy.validate(policy, policy_schema=schema))
+print(pydogwood.validate(policy, policy_schema=schema))
 # OK: validation passed with no errors or warnings.
 
-report = dogwoodpy.replay(
+report = pydogwood.replay(
     policy,
     policy_schema=schema,
     trace=open("trace.log").read(),
@@ -45,7 +45,7 @@ report = dogwoodpy.replay(
 - `format` accepts `"human"` or `"json"`. `emit` accepts `"cedar-policies"`,
   `"cedar-schema"`, `"cedar-json"` or `"both"`. Any other value raises `ValueError`.
 - When the CLI would exit with code 2, the function raises
-  `dogwoodpy.DogwoodError`. The message is the error rendered in the requested
+  `pydogwood.DogwoodError`. The message is the error rendered in the requested
   `format`. A failed `validate` also raises, with the validation report as the
   message.
 - When `lower` produces Cedar that is not self-contained, it emits a
@@ -59,7 +59,7 @@ the policy language, schemas and trace format.
 ## Installation
 
 ```sh
-pip install dogwoodpy
+pip install pydogwood
 ```
 
 Wheels are published for Linux (x86_64, aarch64), macOS (x86_64, arm64) and
@@ -72,8 +72,8 @@ You need a Rust toolchain that supports edition 2024 (Rust 1.85 or newer). Get
 one from [rustup](https://rustup.rs).
 
 ```sh
-git clone --recurse-submodules https://github.com/skmono/dogwood-py.git
-cd dogwood-py
+git clone --recurse-submodules https://github.com/skmono/pydogwood.git
+cd pydogwood
 pip install .
 ```
 
@@ -86,7 +86,7 @@ source venv-dev/bin/activate
 make quick      # maturin develop, then stub check and pytest
 ```
 
-`make stubtest` checks that `dogwoodpy.pyi` matches the built module. After
+`make stubtest` checks that `pydogwood.pyi` matches the built module. After
 changing the dependencies in `pyproject.toml`, run `make fresh-requirements` to
 regenerate `requirements.txt` and `requirements.dev.txt`.
 

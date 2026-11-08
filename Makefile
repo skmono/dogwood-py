@@ -33,15 +33,15 @@ quick: submodules
 
 .PHONY: stubtest
 stubtest:
-	@echo Checking dogwoodpy.pyi against the built module
-	python3 -m mypy.stubtest dogwoodpy --allowlist stubtest-allowlist.txt
+	@echo Checking pydogwood.pyi against the built module
+	python3 -m mypy.stubtest pydogwood --allowlist stubtest-allowlist.txt
 
 .PHONY: release
 release: submodules
 	@echo Building a release
 	set -e ;\
 	maturin build --release ;\
-	WHEEL=$$(ls -1t target/wheels/dogwoodpy-*.whl | head -1) ;\
+	WHEEL=$$(ls -1t target/wheels/pydogwood-*.whl | head -1) ;\
 	echo "Installing $$WHEEL for test" ;\
 	python3 -m pip install --force-reinstall --no-deps "$$WHEEL" ;\
 	$(MAKE) stubtest ;\

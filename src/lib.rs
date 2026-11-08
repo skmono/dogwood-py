@@ -21,6 +21,10 @@ use ops::SchemaInputs;
 
 create_exception!(pydogwood, DogwoodError, PyException);
 
+/// The Dogwood CLI version these bindings mirror. Verified against the
+/// reference CLI by the test suite; bump with the Dogwood dependencies.
+const DOGWOOD_VERSION: &str = "1.1.0";
+
 /// Output format shared by every command (`"human"` or `"json"`).
 #[derive(Copy, Clone, PartialEq, Eq)]
 enum Format {
@@ -236,6 +240,7 @@ fn schema_mcp(manifest: &str) -> PyResult<String> {
 
 #[pymodule]
 fn pydogwood(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add("DOGWOOD_VERSION", DOGWOOD_VERSION)?;
     m.add("DogwoodError", m.py().get_type::<DogwoodError>())?;
     m.add_function(wrap_pyfunction!(py_format, m)?)?;
     m.add_function(wrap_pyfunction!(check_parse, m)?)?;

@@ -38,19 +38,20 @@ jobs:
       # Build an explicit interpreter list, not `--find-interpreter`: the
       # manylinux build images are unpinned and gain interpreters over time.
       # Add a new interpreter here deliberately, once pyo3 supports it.
+      # python3.9 builds the single abi3 wheel for CPython 3.9+; free-threaded
+      # CPython and PyPy have no stable ABI and get one wheel each.
       - name: Build wheels
         uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b  # v1.51.0
         with:
           target: ${{ matrix.platform.target }}
           args: >-
             --release --out dist
-            -i python3.9 python3.10 python3.11 python3.12 python3.13 python3.14 python3.15
-            python3.14t python3.15t pypy3.11
+            -i python3.9 python3.14t python3.15t pypy3.11
           manylinux: auto
       # A missing interpreter must fail the build, not silently drop a wheel.
       - name: Check wheel count
         shell: bash
-        run: test "$(ls dist/*.whl | wc -l)" -eq 10
+        run: test "$(ls dist/*.whl | wc -l)" -eq 4
       - name: Upload wheels
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:
@@ -113,6 +114,7 @@ jobs:
           architecture: ${{ matrix.platform.target }}
       # Build interpreters come from uv and are passed to maturin by path.
       # `--find-interpreter` silently skipped some setup-python installs here.
+      # 3.9 builds the abi3 wheel; see the linux job.
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2  # v10.3.3
         with:
           enable-cache: false
@@ -120,7 +122,7 @@ jobs:
         shell: bash
         run: |
           set -e
-          versions="3.9 3.10 3.11 3.12 3.13 3.14 3.15 3.14t 3.15t pypy3.11"
+          versions="3.9 3.14t 3.15t pypy3.11"
           uv python install $versions
           paths=""
           for v in $versions; do
@@ -135,7 +137,7 @@ jobs:
           args: --release --out dist -i ${{ env.INTERPRETERS }}
       - name: Check wheel count
         shell: bash
-        run: test "$(ls dist/*.whl | wc -l)" -eq 10
+        run: test "$(ls dist/*.whl | wc -l)" -eq 4
       - name: Upload wheels
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:
@@ -172,13 +174,14 @@ jobs:
           python-version: 3.13
       # Build interpreters come from uv and are passed to maturin by path.
       # `--find-interpreter` silently skipped some setup-python installs here.
+      # 3.9 builds the abi3 wheel; see the linux job.
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2  # v10.3.3
         with:
           enable-cache: false
       - name: Install build interpreters
         run: |
           set -e
-          versions="3.9 3.10 3.11 3.12 3.13 3.14 3.15 3.14t 3.15t pypy3.11"
+          versions="3.9 3.14t 3.15t pypy3.11"
           uv python install $versions
           paths=""
           for v in $versions; do
@@ -191,7 +194,7 @@ jobs:
           target: ${{ matrix.platform.target }}
           args: --release --out dist -i ${{ env.INTERPRETERS }}
       - name: Check wheel count
-        run: test "$(ls dist/*.whl | wc -l)" -eq 10
+        run: test "$(ls dist/*.whl | wc -l)" -eq 4
       - name: Upload wheels
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
         with:

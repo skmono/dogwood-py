@@ -15,10 +15,12 @@ from pathlib import Path
 
 import pytest
 
+import pydogwood
+
 DOGWOOD = Path(__file__).parent.parent / "third_party" / "dogwood"
 EXAMPLES = DOGWOOD / "dogwood-docs" / "examples"
 MCP_MANIFEST = DOGWOOD / "dogwood-language" / "mcp_tools.json"
-DOGWOOD_VERSION = "1.1.0"
+DOGWOOD_VERSION = pydogwood.DOGWOOD_VERSION
 
 if not EXAMPLES.is_dir():
     raise pytest.UsageError(

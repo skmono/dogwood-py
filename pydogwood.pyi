@@ -5,9 +5,10 @@ strings, flags become keyword-only arguments, and the text the CLI prints to
 stdout is returned.
 """
 
-from typing import Literal, Optional
+from typing import Final, Literal, Optional
 
 __all__ = [
+    "DOGWOOD_VERSION",
     "DogwoodError",
     "check_parse",
     "explain",
@@ -23,6 +24,9 @@ __all__ = [
 
 _Format = Literal["human", "json"]
 _Emit = Literal["cedar-policies", "cedar-schema", "cedar-json", "both"]
+
+DOGWOOD_VERSION: Final[str]
+"""The Dogwood CLI version these bindings mirror, e.g. ``"1.1.0"``."""
 
 class DogwoodError(Exception):
     """A fatal operation error (CLI exit code 2), rendered in the requested format.

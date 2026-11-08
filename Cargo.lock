@@ -1422,7 +1422,7 @@ dependencies = [
 
 [[package]]
 name = "pydogwood"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "dogwood-formatter",
  "dogwood-language",

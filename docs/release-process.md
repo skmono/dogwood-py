@@ -30,7 +30,7 @@ If the release moves to a new Dogwood version, also update:
 - `src/ops.rs` and `src/error.rs`, copied from that version's `dogwood-cli`;
 - `src/render.rs`, adapted from the same crate;
 - the `third_party/dogwood` submodule, checked out at the matching tag;
-- `DOGWOOD_VERSION` in `tests/conftest.py`.
+- `DOGWOOD_VERSION` in `src/lib.rs` (the test suite checks it against the submodule's CLI).
 
 Open a PR and wait for CI to pass on every platform, then merge.
 
@@ -64,4 +64,5 @@ At https://pypi.org/project/pydogwood/X.Y.Z/, check that the sdist and wheels fo
 - **macOS:** x86_64 and arm64
 - **Windows:** x64
 
-Each platform should have wheels for CPython 3.9–3.15, the free-threaded 3.14t and 3.15t, and PyPy 3.11.
+Each platform should have four wheels: one `cp39-abi3` wheel covering CPython 3.9+, plus version-specific wheels for
+the free-threaded 3.14t and 3.15t and for PyPy 3.11.

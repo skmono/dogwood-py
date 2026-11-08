@@ -2,16 +2,26 @@
 validation, keyword-only flags, and exception/warning types."""
 
 import json
+import re
 import warnings
 
 import pytest
 
 import pydogwood
-from conftest import EXAMPLES, read_utf8
+from conftest import DOGWOOD, EXAMPLES, read_utf8
 
 BUNDLE = EXAMPLES / "access_not_revoked_since_grant"
 POLICY = read_utf8(BUNDLE / "policy.dw")
 SCHEMA = read_utf8(BUNDLE / "schema.cedarschema")
+
+
+def test_dogwood_version_matches_reference_workspace():
+    # Without building the CLI (the aarch64 job skips that): the submodule's
+    # workspace version is what `dogwood --version` reports.
+    manifest = read_utf8(DOGWOOD / "Cargo.toml")
+    match = re.search(r'^\[workspace\.package\]\n(?:[^\[].*\n)*?version = "([^"]+)"', manifest, re.M)
+    assert match, "no [workspace.package] version in the reference Cargo.toml"
+    assert pydogwood.DOGWOOD_VERSION == match.group(1)
 
 
 @pytest.mark.parametrize("fn", [pydogwood.check_parse, pydogwood.schema_action])

@@ -1,6 +1,6 @@
 [package]
 name = "pydogwood"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Python bindings for the Dogwood policy CLI"
 license = "Apache-2.0"
@@ -31,6 +31,8 @@ crate-type = ["cdylib"]
 dogwood-formatter = "1.1"
 dogwood-language = "1.1"
 miette = { version = "7.6", features = ["fancy"] }
-pyo3 = "0.30"
+# One abi3 wheel per platform covers CPython 3.9+; free-threaded CPython and
+# PyPy cannot use the stable ABI, so maturin still builds those per version.
+pyo3 = { version = "0.30", features = ["abi3-py39"] }
 serde = "1.0"
 serde_json = "1.0"

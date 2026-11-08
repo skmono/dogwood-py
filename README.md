@@ -2,6 +2,11 @@
 
 Python bindings for the [Dogwood](https://github.com/dogwood-policy/dogwood) policy toolchain.
 
+> **Disclaimer:** This is an unofficial personal project. I am not affiliated
+> with, endorsed by, or sponsored by the Dogwood team or its maintainers.
+> For the official toolchain, see the
+> [Dogwood repository](https://github.com/dogwood-policy/dogwood).
+
 Every `dogwood` CLI command is available as a Python function. You pass file
 contents as strings instead of paths, and CLI flags become keyword arguments
 with the same names and defaults. Each function returns exactly what the CLI

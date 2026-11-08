@@ -2,8 +2,8 @@
 
 Releasing a new `pydogwood` version is tag-driven. Pushing a `v*` tag triggers the `release` job in
 `.github/workflows/CI.yml`. That job waits for wheels from every platform plus the sdist, generates build-provenance
-attestations, and publishes to PyPI through [Trusted Publishing](https://docs.pypi.org/trusted-publishers/) (OIDC, so
-no long-lived tokens).
+attestations, publishes to PyPI through [Trusted Publishing](https://docs.pypi.org/trusted-publishers/) (OIDC, so
+no long-lived tokens), and creates the GitHub Release with the distributions attached.
 
 ## Prerequisites (one-time)
 
@@ -51,8 +51,10 @@ Pushing the tag starts a full CI run plus the `release` job.
 The `release` job pauses at the `pypi-release` environment until a reviewer approves it. Open the CI run for the tag
 in the Actions tab and click **Review deployments** → `pypi-release` → **Approve and deploy**.
 
-The job then downloads every wheel and the sdist, attests them, and runs `maturin upload --skip-existing`. With
-`--skip-existing`, re-running the job for an already-published version does nothing.
+The job then downloads every wheel and the sdist, attests them, and uploads them with `pypa/gh-action-pypi-publish`,
+which also publishes a PEP 740 attestation for each file. It then creates the GitHub Release for the tag, with notes
+generated from the merged PRs and every distribution attached. Re-running the job is safe: files already on PyPI
+are skipped, and an existing GitHub Release is reused with its attachments replaced.
 
 ### 4. Verify
 

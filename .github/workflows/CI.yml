@@ -237,22 +237,42 @@ jobs:
       # Mint short-lived OIDC tokens for PyPI trusted publishing and for
       # build-provenance attestation
       id-token: write
-      # Used to upload release artifacts
+      # Used to create the GitHub Release and attach the distributions
       contents: write
       # Used to generate artifact attestation
       attestations: write
     steps:
+      # Merge every build job's artifact into one dist/ directory.
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        with:
+          pattern: wheels-*
+          path: dist
+          merge-multiple: true
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32  # v4.1.0
         with:
-          subject-path: 'wheels-*/*'
+          subject-path: 'dist/*'
+      # Trusted Publishing via OIDC; also uploads PEP 740 attestations to PyPI.
       - name: Publish to PyPI
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b  # v1.51.0
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086  # v1.14.3
         with:
-          command: upload
-          args: --non-interactive --skip-existing wheels-*/*
+          skip-existing: true
+      # Idempotent like the upload: a re-run reuses the existing release and
+      # replaces its attached files.
+      - name: Create GitHub Release
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -e
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --generate-notes \
+              --title "pydogwood $GITHUB_REF_NAME"
+          fi
 
   # Supply-chain guardrail: zizmor audits the workflows for unpinned
   # actions, script injection, dangerous triggers, and over-broad
